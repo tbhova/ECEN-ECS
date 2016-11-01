@@ -1,0 +1,222 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+
+    <script type="text/javascript" src="utilities.js"></script>
+    <script type="text/javascript" src="process_transcript.js"></script>
+    <script type="text/javascript" src="debugging.js"></script>
+
+    <script type="text/javascript">
+
+        var all_courses = new Array();
+        var duplicate_courses  = new Array();
+        var working_term = "Winter_4040";
+        var student_name = "";
+        var student_major = "";
+        var student_minor = "";
+
+    </script>
+
+    <title>CSIS curriculum sheets</title>
+</head>
+
+
+<body onLoad="browser_validate(); hide_show_debug_data(); hide_show_debug_button(0);">
+
+<center>
+    <table center>
+        <tr><td>
+
+            <p>
+            <center>
+                <h1><font color="red">Electronic Curriculum Sheets</font> (ECS)</h1>
+                <h2>(provided by the CSIS department)</h2>
+            </center>
+            </p>
+
+
+
+            <p>
+                Suggestions for improvements are welcome and
+                can be <a href="mailto:kaschueller@ysu.edu">emailed to me.</a>
+            </p>
+
+            <p>
+                Because this system does not have direct access to your transcript, you must do the following:
+            <ol>
+                <li>Keep this window/tab open,</li>
+                <li>Login to the YSU portal,</li>
+                <li>Open your transcript,</li>
+                <li>Copy your transcript to the clipboard (<font color=red>IE does not work</font>, Firefox does and Chrome appears to work)
+                    <ol>
+                        <li>Select all (ctrl-a)</li>
+                        <li>Right click and choose copy (or ctrl-c)</li>
+                    </ol>
+                <li>Paste your transcript in the box below: (or ctrl-v)</li>
+                <li>Click the "Process Transcript" button</li>
+            </ol>
+
+
+
+
+            </p>
+
+
+            <p>
+                Copy transcript and past here:
+                <input value="Paste Transcript data here"  id="textInput" type="text" size="50">
+            </p>
+
+            <p>
+                <input onclick="process_the_transcript();" type="button" value="Process Transcript Data" id="buttonProcessData">
+
+                <!--
+                    As of 11/23/2015, the blank sheets give a referer error;
+                    should be fixed, for now just remove the button   KAS
+
+                &nbsp;&nbsp;&nbsp;&nbsp; or &nbsp;&nbsp;&nbsp;&nbsp;
+                <input onclick="get_blank_sheet();" type="button" value="Get Blank Curriculum Sheet" id="buttonBlankSheet">
+                -->
+
+            </p>
+
+
+            <br />
+
+            <h2>Limitations and Suitability</h2>
+            <p>
+                This system works well for most students.
+                It is believed to be at least as accurate as the DARS system
+                for the progrrams it implements.
+                (DARS implements ALL YSU programs.)
+                For the CSIS department if this ECS shows a students has completed
+                the requirements for a degree in the CSIS department,
+                the department considers the requirements met
+                (<a href="http://csis.ysu.edu/which_curriculum.php">provided the correct curriculum has been used</a>).
+            </p>
+            <p>
+                For a number of reasons,
+                the ECS could produce incorrect or incomplete results.
+                Transfer credit is particularly difficult for any automated system
+                to handle.
+                If something looks wrong, check with a human advisor.
+                Humans are best equiped to handle unforeseen conditions.
+            </p>
+            <p>
+                Since the 2012 Gen Ed model allows some courses to meet multiple
+                catagories, the ECS does its best to allocate such courses.
+                It might not know your intentions for a given course.
+                Sometimes the catagory of a course changes when other courses are added.
+            </p>
+
+
+
+            <h2>Privacy Policy</h2>
+            <p>
+                This system currently collects the following information:
+            <ul>
+                <li>Student name and banner ID.</li>
+                <li>The major and minor as listed on the transcript (without student information).</li>
+                <li>The Banner ID of the user (student or advisor) and time that the system was used.</li>
+                <li>Counts of how many courses of the various Gen Ed 2012 catagories are on the transcript (without any ID or grades).</li>
+                <li>Some debugging information such as what courses match various requirements (without any ID or grades)</li>
+                <li>Some debugging information such as what courses match various requirements (without any ID or grades)</li>
+            </ul>
+            Using this system implies concent for such data to be collected.
+            </p>
+
+
+
+            <h2>Expansion</h2>
+            <p>
+                Currently data is available for a number of major programs within the STEM college and a number of minors.
+                Current plans for expansion include:
+            <ul>
+                <li>Implementing more minors</li>
+                <li>Implementing all majors within STEM.</li>
+                <li>Limiting the selection of majrs and minors to those a student
+                    can leitimately use.</li>
+            </ul>
+            Suggestions are welcome
+            and
+            can be <a href="mailto:kriss@csis.ysu.edu">emailed to me.</a>
+            </p>
+
+        </td></tr>
+    </table>
+</center>
+
+<div id="Debugging_switch">
+    <p>
+        <input onclick='hide_show_debug_data();' type='button' value='Hide Data' id="hide_button">
+    </p>
+</div>
+
+
+<div id="Debugging">
+
+
+    Select the program you which to be processed:
+    <div id='data_to_send_div'>
+        <form id='data_to_send_form' method='POST' target="_blank"
+              action="https://www.csis.ysu.edu/~csis1/cgi-bin/ECS_1.pl">
+
+            A: <input type='text' name="header_info" id='header_data_to_send' size='120'>
+            <br />
+            B: <input type='text' name="course_info" id='course_data_to_send' size='120'>
+            <br />
+            C: <input type='text' name="major_by_term_info" id='major_by_term_data_to_send' size='120'>
+            <br />
+            All: <input type='text' name="transcript_copy" id='transcript_to_send' size='220'>
+            <br />
+
+
+        </form>
+    </div>
+
+
+    <br>
+    <h2>Header Data</h2>
+    <div id='header_data'> </div>
+
+    <br>
+    <h2>Class Data</h2>
+    <div id='course_data'> </div>
+
+    <br>
+    <h2>Banner info</h3>
+        <div id="bannerInfo">
+        </div>
+
+        <br>
+        <h2>Student info</h3>
+            <div id="studInfo">
+            </div>
+
+            <br>
+            <h2>Transfer Courses</h3>
+                <div id='transferCourses'>
+                </div>
+
+                <br>
+                <h2>YSU Courses</h3>
+                    <div id='YSUCourses'>
+                    </div>
+
+                    <br>
+                    <h2>Current Courses</h3>
+                        <div id="currentCourses">
+                        </div>
+
+                        <br>
+                        <h2>Transcript Totals</h3>
+                            <div id='transcriptTotals'>
+                            </div>
+
+</div> <!-- Debugging div  -->
+
+
+
+</body>
+</html>
